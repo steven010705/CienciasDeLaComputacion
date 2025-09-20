@@ -1,0 +1,73 @@
+Requerimientos del programa
+
+Entidades principales
+
+Pastores:
+
+Cada uno tiene:
+
+Una cantidad de feligreses (ovejas/gente).
+
+Una cantidad de dinero/tesoro.
+
+Se sientan en una mesa redonda (estructura circular).
+
+Pila de desposeídos:
+
+Los pastores eliminados van a esta pila.
+
+Se maneja como una pila LIFO (el último en entrar es el primero en salir).
+
+Reglas del juego
+
+El juego empieza con el pastor más rico.
+
+En su turno, un pastor debe decidir una dirección (izquierda o derecha).
+
+Dentro de esa dirección, puede mirar hasta un número fijo n de vecinos (dado por el juego).
+
+Elige de esos vecinos al que tenga menos feligreses y lo elimina:
+
+El eliminado va a la pila de desposeídos.
+
+Sus ovejas y tesoros pasan al pastor que lo eliminó.
+
+Alternativamente, si la pila de desposeídos no está vacía, el pastor puede optar por rescatar al último eliminado:
+
+El rescatado regresa a la mesa.
+
+Recibe la mitad de los feligreses y tesoros del pastor que lo revive.
+
+Regla especial del pastor más pobre
+
+Si en algún turno le toca jugar al pastor más pobre de la mesa:
+
+Puede robar una vez por turno al más rico.
+
+Se lleva la tercera parte de sus feligreses y tesoros.
+
+Restricciones de posición en la mesa
+
+A la izquierda de un pastor puede haber otro del mismo oficio (mismo tipo de pastor).
+
+A la derecha, nunca puede haber un pastor con el mismo oficio.
+
+Después de cada acción (eliminación, rescate o robo), se debe reorganizar la mesa para respetar esta regla.
+
+Condición de término
+
+El juego termina cuando solo queda un pastor en la mesa.
+
+Ese pastor es el ganador, quedando con todo el tesoro y todos los feligreses.
+
+Implementación solicitada
+
+Lenguaje: Java.
+
+Debe tener una interfaz gráfica que:
+
+Represente la mesa como círculos (pastores sentados en ronda).
+
+Represente la pila como columnas (pastores apilados).
+
+Debe permitir controlar la cantidad inicial de pastores y limitarla para que sea manejable visualmente.
