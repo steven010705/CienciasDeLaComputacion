@@ -8,44 +8,59 @@ public class ControlJuego {
     private VistaConsola vista;
 
     public ControlJuego() {
+        // Primero crear el modelo
         juego = new Juego();
+        // Luego crear la vista
         vista = new VistaConsola();
     }
 
     public void iniciar() {
-        juego.iniciarJuego();
-
-        vista.mostrarMesa(juego.getMesaRedonda());
-        vista.mostrarPilaDesposeidos(juego.getPilaDesposeidos());
-        vista.mostrarTurno(juego.getMesaRedonda().getPastorActual(), juego.getNumeroTurno());
-        
-        while (!juego.juegoTerminado()) {
-            juego.ejecutarTurno();
-
-            vista.mostrarMesa(juego.getMesaRedonda());
-            vista.mostrarPilaDesposeidos(juego.getPilaDesposeidos());
-            vista.mostrarTurno(juego.getMesaRedonda().getPastorActual(), juego.getNumeroTurno());
-        }
-        vista.mostrarGanador(juego.obtenerGanador());
-    }
-
-    public void procesarTurno() {
-        // Lógica para procesar el turno actual
-        vista.mostrarMesa(juego.getMesaRedonda());
-        vista.mostrarPilaDesposeidos(juego.getPilaDesposeidos());
-        vista.mostrarTurno(juego.getMesaRedonda().getPastorActual(), juego.getNumeroTurno());
         try {
-            Thread.sleep(1000); // 1 segundo entre turnos
+            // Iniciar el juego
+            juego.iniciarJuego();
+            
+            // Pequeña pausa para que Swing se inicialice
+            Thread.sleep(100);
+            
+            // Mostrar estado inicial EN EL EDT
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                vista.mostrarMesa(juego.getMesaRedonda());
+                vista.mostrarPilaDesposeidos(juego.getPilaDesposeidos());
+                vista.mostrarTurno(juego.getMesaRedonda().getPastorActual(), juego.getNumeroTurno());
+                vista.hacerVisible(); // Forzar visibilidad
+            });
+
+            // Bucle principal del juego
+            while (!juego.juegoTerminado()) {
+                Thread.sleep(1000); // Pausa antes del turno
+                
+                juego.ejecutarTurno();
+                
+                // Actualizar la vista en el EDT
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    vista.mostrarMesa(juego.getMesaRedonda());
+                    vista.mostrarPilaDesposeidos(juego.getPilaDesposeidos());
+                    vista.mostrarTurno(juego.getMesaRedonda().getPastorActual(), juego.getNumeroTurno());
+                });
+                
+                Thread.sleep(2000); // Pausa para ver el resultado del turno
+            }
+
+            // Mostrar ganador
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                vista.mostrarGanador(juego.obtenerGanador());
+            });
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            System.err.println("Juego interrumpido");
         }
     }
 
     public void finalizar() {
-        // Lógica para finalizar el juego
         if (vista != null) {
             vista.dispose();
         }
-        System.exit(0); // Opcional: termina la aplicación completamente
+        System.exit(0);
     }
 }
