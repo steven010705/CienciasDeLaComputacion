@@ -1,7 +1,6 @@
 // FileName: MultipleFiles/Juego.java
 package co.edu.udistrital.model;
 
-import java.util.List;
 import java.util.Random; // Para simular decisiones aleatorias
 
 public class Juego {
