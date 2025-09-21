@@ -76,10 +76,10 @@ public class VistaConsola extends JFrame {
         btnRescatar = new JButton("Rescatar");
         btnRobar = new JButton("Robar");
         
-        // Deshabilitar botones por ahora
-        btnEliminar.setEnabled(false);
-        btnRescatar.setEnabled(false);
-        btnRobar.setEnabled(false);
+        // Botones habilitados
+        btnEliminar.setEnabled(true);
+        btnRescatar.setEnabled(true);
+        btnRobar.setEnabled(true);
         
         panelBotones.add(btnEliminar);
         panelBotones.add(btnRescatar);
