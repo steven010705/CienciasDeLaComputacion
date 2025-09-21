@@ -1,9 +1,11 @@
+// FileName: MultipleFiles/VistaConsola.java
 package co.edu.udistrital.view;
 
 import co.edu.udistrital.model.MesaRedonda;
 import co.edu.udistrital.model.Pastor;
 import co.edu.udistrital.model.PilaDesposeidos;
 import java.awt.*;
+import java.awt.event.ActionListener; // Importar ActionListener
 import java.util.List;
 import javax.swing.*;
 
@@ -222,5 +224,18 @@ public class VistaConsola extends JFrame {
         SwingUtilities.invokeLater(() -> {
             setVisible(true);
         });
+    }
+
+    // Métodos para añadir ActionListeners a los botones
+    public void addEliminarListener(ActionListener listener) {
+        btnEliminar.addActionListener(listener);
+    }
+
+    public void addRescatarListener(ActionListener listener) {
+        btnRescatar.addActionListener(listener);
+    }
+
+    public void addRobarListener(ActionListener listener) {
+        btnRobar.addActionListener(listener);
     }
 }

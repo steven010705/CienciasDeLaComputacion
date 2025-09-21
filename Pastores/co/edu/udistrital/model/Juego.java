@@ -8,7 +8,7 @@ public class Juego {
     // Atributos
     private MesaRedonda mesaRedonda;
     private PilaDesposeidos pilaDesposeidos;
-    private int numeroTurno;
+    public int numeroTurno;
     private Random aleatorio; // Para simular decisiones aleatorias
 
     // Constructor
