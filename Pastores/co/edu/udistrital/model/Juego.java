@@ -1,7 +1,8 @@
 // FileName: MultipleFiles/Juego.java
 package co.edu.udistrital.model;
 
-import java.util.Random; // Para simular decisiones aleatorias
+import java.util.Random;
+import java.util.Scanner; // Para leer la entrada del usuario
 
 public class Juego {
 
@@ -9,7 +10,7 @@ public class Juego {
     private MesaRedonda mesaRedonda;
     private PilaDesposeidos pilaDesposeidos;
     public int numeroTurno;
-    private Random aleatorio; // Para simular decisiones aleatorias
+    private Random aleatorio; // Para simular decisiones aleatorias y generar valores
 
     // Constructor
     public Juego() {
@@ -21,24 +22,45 @@ public class Juego {
 
     // Métodos
     public void iniciarJuego() {
-        numeroTurno = 1;
-        // Creación de pastores iniciales
-        Pastor p1 = new Pastor("Pastor A", "Oficio 1", 100, 500);
-        Pastor p2 = new Pastor("Pastor B", "Oficio 2", 150, 800);
-        Pastor p3 = new Pastor("Pastor C", "Oficio 1", 80, 300);
-        Pastor p4 = new Pastor("Pastor D", "Oficio 3", 200, 1000);
-        Pastor p5 = new Pastor("Pastor E", "Oficio 2", 120, 600); // Añadido para más variedad
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Digite el número de pastores: ");
+        int n = scanner.nextInt();
+        scanner.close(); // Cerrar el scanner para evitar leaks
 
-        // Agregando pastores a la mesa redonda
-        mesaRedonda.getListaPastores().agregarPastor(p1);
-        mesaRedonda.getListaPastores().agregarPastor(p2);
-        mesaRedonda.getListaPastores().agregarPastor(p3);
-        mesaRedonda.getListaPastores().agregarPastor(p4);
-        mesaRedonda.getListaPastores().agregarPastor(p5);
+        if (n < 1) {
+            System.out.println("Número de pastores debe ser al menos 1. Se usará 1 por defecto.");
+            n = 1;
+        }
+
+        numeroTurno = 1;
+        System.out.println("Inicializando juego con " + n + " pastores...");
+
+        // Creación dinámica de n pastores
+        for (int i = 1; i <= n; i++) {
+            // Nombre: Pastor A, B, C, ... (hasta Z, luego numerado si n>26)
+            String nombre;
+            if (i <= 26) {
+                nombre = "Pastor " + (char)('A' + i - 1);
+            } else {
+                nombre = "Pastor " + i;
+            }
+
+            // Oficio: Ciclando entre 1, 2, 3
+            String oficio = "Oficio " + ((i - 1) % 3 + 1);
+
+            // Dinero y Riqueza: Aleatorios para variedad
+            int dinero = aleatorio.nextInt(151) + 50; // Entre 50 y 200
+            int riqueza = aleatorio.nextInt(801) + 200; // Entre 200 y 1000
+
+            Pastor p = new Pastor(nombre, oficio, dinero, riqueza);
+            mesaRedonda.getListaPastores().agregarPastor(p);
+            System.out.println("Creado: " + nombre + " (" + oficio + ", Dinero: " + dinero + ", Riqueza: " + riqueza + ")");
+        }
 
         // Configuración inicial: El juego comienza con el pastor más rico.
         if (!mesaRedonda.getListaPastores().estaVacia()) {
             mesaRedonda.setPastorActual(mesaRedonda.obtenerMasRico());
+            System.out.println("El juego comienza con: " + mesaRedonda.getPastorActual().getNombre());
         }
     }
 
@@ -51,7 +73,7 @@ public class Juego {
         numeroTurno++;
         Pastor pastorEnTurno = mesaRedonda.getPastorActual();
         System.out.println("\n--- Turno " + numeroTurno + " ---");
-        System.out.println("Es el turno de: " + pastorEnTurno.getNombre() + " (Ovejas: " + pastorEnTurno.getOvejas() + ", Riqueza: " + pastorEnTurno.getRiqueza() + ")");
+        System.out.println("Es el turno de: " + pastorEnTurno.getNombre() + " (Dinero: " + pastorEnTurno.getRiqueza() + ", Riqueza: " + pastorEnTurno.getRiqueza() + ")");
 
         // Encontrar el NodoPastor correspondiente al pastor actual en turno
         NodoPastor nodoPastorEnTurno = buscarNodoPastor(pastorEnTurno);
@@ -63,10 +85,14 @@ public class Juego {
 
         // Regla especial para el pastor más pobre
         // Se obtiene el pastor más pobre de la mesa para comparar
-        Pastor pastorMasPobreEnMesa = mesaRedonda.getListaPastores().buscar().getPastor();
+        // Nota: Asumiendo que buscar() devuelve el más pobre; ajusta si es necesario
+        Pastor pastorMasPobreEnMesa = null;
+        if (!mesaRedonda.getListaPastores().estaVacia()) {
+            pastorMasPobreEnMesa = mesaRedonda.getListaPastores().buscar().getPastor();
+        }
         
         // Si el pastor en turno es el más pobre de la mesa
-        if (pastorEnTurno.equals(pastorMasPobreEnMesa)) {
+        if (pastorMasPobreEnMesa != null && pastorEnTurno.equals(pastorMasPobreEnMesa)) {
             System.out.println(pastorEnTurno.getNombre() + " es el pastor más pobre de la mesa.");
             Pastor pastorMasRicoEnMesa = mesaRedonda.obtenerMasRico();
             
@@ -74,8 +100,7 @@ public class Juego {
             if (pastorMasRicoEnMesa != null && !pastorEnTurno.equals(pastorMasRicoEnMesa)) {
                 pastorEnTurno.robarRecursos(pastorMasRicoEnMesa); // El pastor pobre roba al rico
                 System.out.println(pastorEnTurno.getNombre() + " ha robado recursos a " + pastorMasRicoEnMesa.getNombre());
-                // Reorganizar la mesa después del robo (aunque los recursos cambian, las posiciones no directamente)
-                // El requisito indica "después de cada acción", por lo que se llama.
+                // Reorganizar la mesa después del robo
                 reorganizarMesaDespuesDeAccion(nodoPastorEnTurno);
             } else {
                 System.out.println(pastorEnTurno.getNombre() + " no pudo robar (es el único o no hay otro rico).");
@@ -102,18 +127,18 @@ public class Juego {
                 // Acción de eliminación
                 // Decidir dirección: true para derecha (siguiente), false para izquierda (anterior)
                 boolean sentidoDerecha = aleatorio.nextBoolean();
-                int n = 2; // Número fijo de vecinos a considerar (ej. 2)
+                int vecinos = 2; // Número fijo de vecinos a considerar (ej. 2)
 
-                // Encontrar al pastor más pobre entre 'n' vecinos
-                Pastor pastorAEliminar = mesaRedonda.obtenerMasPobreEntreVecinos(nodoPastorEnTurno, n, sentidoDerecha);
+                // Encontrar al pastor más pobre entre 'vecinos' vecinos
+                Pastor pastorAEliminar = mesaRedonda.obtenerMasPobreEntreVecinos(nodoPastorEnTurno, vecinos, sentidoDerecha);
 
                 // Asegurarse de que haya un pastor a eliminar y que no sea el mismo pastor en turno
                 if (pastorAEliminar != null && !pastorAEliminar.equals(pastorEnTurno)) {
                     // Encontrar el NodoPastor del pastor a eliminar
                     NodoPastor nodoAEliminar = buscarNodoPastor(pastorAEliminar);
                     if (nodoAEliminar != null) {
-                        // Transferir recursos del eliminado al eliminador
-                        pastorAEliminar.transferirRecursos(pastorEnTurno, pastorAEliminar.getOvejas(), pastorAEliminar.getRiqueza());
+                        // Transferir recursos del eliminado al eliminador (ahora con dinero)
+                        pastorAEliminar.transferirRecursos(pastorEnTurno, pastorAEliminar.getRiqueza(), pastorAEliminar.getRiqueza());
                         
                         // Añadir al pastor eliminado a la pila de desposeídos
                         pilaDesposeidos.push(pastorAEliminar);
@@ -219,7 +244,6 @@ public class Juego {
         // 2. Ordenar/reorganizar los pastores basándose en las reglas de oficio.
         // 3. Reconstruir la lista circular a partir de los pastores reorganizados.
     }
-
 
     // Getters
     public MesaRedonda getMesaRedonda() {

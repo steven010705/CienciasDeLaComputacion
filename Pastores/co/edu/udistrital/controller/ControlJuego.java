@@ -2,14 +2,13 @@
 package co.edu.udistrital.controller;
 
 import co.edu.udistrital.model.Juego;
-import co.edu.udistrital.model.Pastor;
-import co.edu.udistrital.model.NodoPastor; // Importar NodoPastor
+import co.edu.udistrital.model.NodoPastor;
+import co.edu.udistrital.model.Pastor; // Importar NodoPastor
 import co.edu.udistrital.view.VistaConsola;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane; // Para mostrar mensajes al usuario
-import java.util.Random; // Para decisiones aleatorias en el controlador si es necesario
+import java.util.Random; // Para mostrar mensajes al usuario
+import javax.swing.JOptionPane; // Para decisiones aleatorias en el controlador si es necesario
 
 public class ControlJuego {
     private Juego juego;
