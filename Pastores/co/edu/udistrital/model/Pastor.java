@@ -5,11 +5,11 @@ public class Pastor {
     //Atributos
     private String nombre;
     private String oficio;
-    private String religion; // Cambiado de 'ovejas' a 'religion'
+    private String religion;
     private int riqueza;
 
     //Constructor
-    public Pastor(String nombre, String oficio, String religion, int riqueza) { // Constructor actualizado
+    public Pastor(String nombre, String oficio, String religion, int riqueza) {
         this.nombre = nombre;
         this.oficio = oficio;
         this.religion = religion;
@@ -17,41 +17,43 @@ public class Pastor {
     }
 
     //Casos de uso
-    public void transferirRecursos(Pastor destinatario, int riquezaTransferida) { // Solo riqueza
-        // Caso donde el pastor eliminado debe darle su riqueza al que lo eliminó
+
+    // Transfiere una cantidad de riqueza a otro pastor (usado en eliminación)
+    public void transferirRecursos(Pastor destinatario, int riquezaTransferida) {
         this.riqueza -= riquezaTransferida;
         destinatario.recibirRecursos(riquezaTransferida);
     }
 
-    public void recibirRecursos(int riquezaRecibida) { // Solo riqueza
-        // Caso en el que un pastor que eliminó a otro recibe recursos del otro
+    // Recibe una cantidad de riqueza
+    public void recibirRecursos(int riquezaRecibida) {
         this.riqueza += riquezaRecibida;
     }
 
+    // Divide la riqueza con otro pastor (usado en rescate)
     public void dividirRecursos(Pastor destinatario){
-        // Caso donde el pastor salvador le da la mitad de su riqueza al pastor salvado
-        int riquezaParaDar = this.riqueza / 2;
+        int riquezaParaDar = this.riqueza / 2; // Da la mitad de su riqueza
         this.riqueza -= riquezaParaDar;
-        destinatario.recibirRecursos(riquezaParaDar); 
+        destinatario.recibirRecursos(riquezaParaDar);
     }
 
+    // Roba una parte de la riqueza de otro pastor (usado por el más pobre)
     public void robarRecursos(Pastor rico){
-        // Caso donde el pastor más pobre le roba la tercera parte de su riqueza al pastor más rico
-        int riquezaParaRobar = rico.getRiqueza() / 3;
+        int riquezaParaRobar = rico.getRiqueza() / 3; // Roba la tercera parte
         rico.setRiqueza(rico.getRiqueza() - riquezaParaRobar);
         this.recibirRecursos(riquezaParaRobar);
     }
 
-    // Comparación para saber quién es más rico o más pobre
+    // Compara si este pastor es más rico que otro
     public boolean esMasRicoQue(Pastor otroPastor){
         return this.riqueza > otroPastor.getRiqueza();
     }
 
+    // Compara si este pastor es más pobre que otro
     public boolean esMasPobreQue(Pastor otroPastor){
         return this.riqueza < otroPastor.getRiqueza();
     }
 
-    // Nuevo método para verificar si tienen la misma religión
+    // Verifica si este pastor tiene la misma religión que otro
     public boolean tieneMismaReligion(Pastor otroPastor) {
         return this.religion.equals(otroPastor.getReligion());
     }
@@ -61,7 +63,7 @@ public class Pastor {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Pastor pastor = (Pastor) obj;
-        return nombre.equals(pastor.nombre);
+        return nombre.equals(pastor.nombre); // La igualdad se basa en el nombre
     }
 
     @Override
@@ -69,7 +71,7 @@ public class Pastor {
         return nombre.hashCode();
     }
 
-    //Getters y Setters
+    // Getters y Setters
     public String getNombre() {
         return nombre;
     }
@@ -84,10 +86,10 @@ public class Pastor {
         this.oficio = oficio;
     }
 
-    public String getReligion() { // Getter para religion
+    public String getReligion() {
         return religion;
     }
-    public void setReligion(String religion) { // Setter para religion
+    public void setReligion(String religion) {
         this.religion = religion;
     }
 

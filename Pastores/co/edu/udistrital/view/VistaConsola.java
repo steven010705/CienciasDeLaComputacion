@@ -1,232 +1,166 @@
 package co.edu.udistrital.view;
 
-import co.edu.udistrital.model.MesaRedonda;
-import co.edu.udistrital.model.Pastor;
-import co.edu.udistrital.model.PilaDesposeidos;
+import co.edu.udistrital.model.*;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
-import javax.swing.*;
 
 public class VistaConsola extends JFrame {
 
-    private JPanel panelMesa;
-    private JPanel panelPila;
+    private JPanel panelMesa, panelPila;
     private JLabel labelTurno;
-    private JButton btnEliminar;
-    private JButton btnRescatar;
-    private JButton btnRobar;
-    private boolean primeraVez = true;
+    private JButton btnEliminar, btnRescatar, btnRobar;
 
     public VistaConsola() {
-        setTitle(" Juego de Pastores ");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setTitle("Juego de Pastores");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setExtendedState(MAXIMIZED_BOTH);
         setLayout(new BorderLayout(10, 10));
-        getContentPane().setBackground(new Color(245, 245, 255));
+        getContentPane().setBackground(new Color(255, 250, 240));
 
         JPanel panelTurno = new JPanel();
-        panelTurno.setBackground(new Color(200, 220, 255));
-        panelTurno.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        labelTurno = new JLabel(" Esperando inicio del juego...");
-        labelTurno.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-        labelTurno.setForeground(new Color(50, 50, 150));
+        panelTurno.setBackground(new Color(210, 240, 255));
+        labelTurno = new JLabel("Esperando inicio del juego...");
+        labelTurno.setFont(new Font("Comic Sans MS", Font.BOLD, 26));
         panelTurno.add(labelTurno);
         add(panelTurno, BorderLayout.NORTH);
 
-        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
-        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
         panelMesa = new JPanel() {
-            @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(new Color(180, 220, 180));
-                g2d.fillOval(40, 40, getWidth() - 80, getHeight() - 80);
-
-                g2d.setStroke(new BasicStroke(6));
-                g2d.setColor(new Color(100, 150, 100));
-                g2d.drawOval(40, 40, getWidth() - 80, getHeight() - 80);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                int w = getWidth(), h = getHeight(), pad = 40;
+                g2d.setColor(new Color(200, 255, 200));
+                g2d.fillOval(pad, pad, w - 2 * pad, h - 2 * pad);
+                g2d.setStroke(new BasicStroke(5));
+                g2d.setColor(new Color(120, 170, 120));
+                g2d.drawOval(pad, pad, w - 2 * pad, h - 2 * pad);
             }
         };
-        panelMesa.setBackground(new Color(240, 255, 240));
-        panelMesa.setPreferredSize(new Dimension(600, 600));
-        panelMesa.setBorder(BorderFactory.createTitledBorder(" Mesa Redonda"));
-
-        JScrollPane scrollMesa = new JScrollPane(panelMesa);
-        scrollMesa.setPreferredSize(new Dimension(620, 620));
-        panelPrincipal.add(scrollMesa, BorderLayout.CENTER);
+        panelMesa.setBorder(BorderFactory.createTitledBorder("Mesa Redonda"));
 
         panelPila = new JPanel();
         panelPila.setLayout(new BoxLayout(panelPila, BoxLayout.Y_AXIS));
-        panelPila.setBackground(new Color(255, 240, 240));
-        panelPila.setPreferredSize(new Dimension(250, 600));
-        panelPila.setBorder(BorderFactory.createTitledBorder(" Pila de Desposeídos"));
+        panelPila.setBackground(new Color(255, 230, 240));
+        panelPila.setBorder(BorderFactory.createTitledBorder("Pila de Desposeídos"));
 
-        JScrollPane scrollPila = new JScrollPane(panelPila);
-        scrollPila.setPreferredSize(new Dimension(270, 620));
-        panelPrincipal.add(scrollPila, BorderLayout.EAST);
-
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.add(panelMesa, BorderLayout.CENTER);
+        panelPrincipal.add(panelPila, BorderLayout.EAST);
         add(panelPrincipal, BorderLayout.CENTER);
 
         JPanel panelBotones = new JPanel();
-        panelBotones.setBackground(new Color(230, 230, 255));
-        panelBotones.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+        panelBotones.setBackground(new Color(250, 240, 255));
         btnEliminar = new JButton("Eliminar");
         btnRescatar = new JButton("Rescatar");
         btnRobar = new JButton("Robar");
-
-        JButton[] botones = {btnEliminar, btnRescatar, btnRobar};
-        for (JButton b : botones) {
-            b.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
-            b.setBackground(new Color(200, 220, 255));
+        for (JButton b : new JButton[]{btnEliminar, btnRescatar, btnRobar}) {
+            b.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
+            b.setBackground(new Color(220, 235, 250));
             b.setFocusPainted(false);
-            b.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2, true));
+            b.setBorder(BorderFactory.createLineBorder(new Color(100, 120, 200), 2, true));
+            panelBotones.add(b);
         }
-
-        panelBotones.add(btnEliminar);
-        panelBotones.add(btnRescatar);
-        panelBotones.add(btnRobar);
         add(panelBotones, BorderLayout.SOUTH);
+    }
 
-        setMinimumSize(new Dimension(1100, 800));
-        setLocationRelativeTo(null);
-        pack();
+    public int pedirNumeroPastores() {
+        while (true) {
+            String s = JOptionPane.showInputDialog(this, "Ingrese el número de pastores (mínimo 1):", "Configuración inicial", JOptionPane.QUESTION_MESSAGE);
+            if (s == null) {
+                return 0;
+            
+            }try {
+                int n = Integer.parseInt(s);
+                if (n > 0) {
+                    return n;
+            
+                }} catch (Exception ignored) {
+            }
+            JOptionPane.showMessageDialog(this, "Número inválido.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void mostrarMesa(MesaRedonda mesa) {
-        if (mesa == null || mesa.getListaPastores() == null) return;
-
-        List<Pastor> pastores = mesa.getListaPastores().toList();
-        if (pastores.isEmpty()) return;
-
+        if (mesa == null) {
+            return;
+        
+        }List<Pastor> ps = mesa.getListaPastores().toList();
+        if (ps.isEmpty()) {
+            return;
+        }
         SwingUtilities.invokeLater(() -> {
             panelMesa.removeAll();
             panelMesa.setLayout(null);
-
-            int n = pastores.size();
-            int panelWidth = panelMesa.getWidth();
-            int panelHeight = panelMesa.getHeight();
-
-            if (panelWidth == 0 || panelHeight == 0) {
-                panelWidth = 600;
-                panelHeight = 600;
-            }
-
-            int centerX = panelWidth / 2;
-            int centerY = panelHeight / 2;
-            int radius = Math.min(panelWidth, panelHeight) / 2 - 100;
-
+            int w = Math.max(panelMesa.getWidth(), 800), h = Math.max(panelMesa.getHeight(), 600);
+            int cx = w / 2, cy = h / 2, lw = 85, lh = 50, n = ps.size();
+            int r = (int) (Math.min(w, h) / 2 - 150 - Math.max(lw, lh) / 2); // 🔹 radio ajustado automáticamente
             for (int i = 0; i < n; i++) {
-                Pastor p = pastores.get(i);
-                double angle = 2 * Math.PI * i / n;
-                int x = (int) (centerX + radius * Math.cos(angle)) - 70;
-                int y = (int) (centerY + radius * Math.sin(angle)) - 50;
-
-                JLabel lbl = new JLabel("<html><center><b>" + p.getNombre() +
-                        "</b><br> Religión: " + p.getReligion() + // Mostrar religión
-                        "<br> Tesoro: " + p.getRiqueza() + "</center></html>");
-                lbl.setBounds(x, y, 140, 80);
+                Pastor p = ps.get(i);
+                double ang = -Math.PI / 2 + 2 * Math.PI * i / n;
+                int x = (int) (cx + r * Math.cos(ang) - lw / 2), y = (int) (cy + r * Math.sin(ang) - lh / 2);
+                JLabel lbl = new JLabel("<html><center><b>" + p.getNombre() + "</b><br>" + p.getReligion() + "<br>$" + p.getRiqueza() + "</center></html>", SwingConstants.CENTER);
+                lbl.setBounds(x, y, lw, lh);
                 lbl.setOpaque(true);
-                lbl.setBackground(new Color(255, 255, 200));
-                lbl.setHorizontalAlignment(SwingConstants.CENTER);
-                lbl.setVerticalAlignment(SwingConstants.CENTER);
-                lbl.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2, true));
-                lbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-
+                lbl.setBackground(new Color(255, 255, 220));
+                lbl.setBorder(BorderFactory.createLineBorder(p.equals(mesa.getPastorActual()) ? Color.RED : new Color(180, 180, 180), 2, true));
+                lbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 13));
                 panelMesa.add(lbl);
             }
-
             panelMesa.revalidate();
             panelMesa.repaint();
-
-            if (primeraVez) {
-                primeraVez = false;
-                setVisible(true);
-            }
         });
     }
 
-    public void mostrarPilaDesposeidos(PilaDesposeidos pilaDesposeidos) {
-        if (pilaDesposeidos == null) return;
-
+    public void mostrarPilaDesposeidos(PilaDesposeidos pila) {
         SwingUtilities.invokeLater(() -> {
             panelPila.removeAll();
-            List<Pastor> pila = pilaDesposeidos.toList();
-
-            if (pila.isEmpty()) {
-                JLabel vacio = new JLabel(" Pila vacía");
-                vacio.setFont(new Font("Comic Sans MS", Font.ITALIC, 16));
-                vacio.setAlignmentX(Component.CENTER_ALIGNMENT);
-                panelPila.add(vacio);
+            List<Pastor> l = pila.toList();
+            if (l.isEmpty()) {
+                JLabel v = new JLabel("Pila vacía");
+                v.setFont(new Font("Comic Sans MS", Font.ITALIC, 16));
+                v.setAlignmentX(CENTER_ALIGNMENT);
+                panelPila.add(v);
             } else {
-                for (int i = pila.size() - 1; i >= 0; i--) {
-                    Pastor p = pila.get(i);
-                    JLabel lbl = new JLabel(" " + p.getNombre() +
-                            " |  " + p.getReligion() + // Mostrar religión
-                            " |  " + p.getRiqueza());
+                for (Pastor p : l) {
+                    JLabel lbl = new JLabel(" " + p.getNombre() + " | " + p.getReligion() + " | " + p.getRiqueza());
                     lbl.setOpaque(true);
-                    lbl.setBackground(new Color(255, 230, 240));
-                    lbl.setBorder(BorderFactory.createCompoundBorder(
-                            BorderFactory.createLineBorder(Color.PINK, 2),
-                            BorderFactory.createEmptyBorder(5, 10, 5, 10)
-                    ));
+                    lbl.setBackground(new Color(255, 240, 245));
+                    lbl.setBorder(BorderFactory.createLineBorder(new Color(255, 200, 220), 2));
                     lbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
                     lbl.setMaximumSize(new Dimension(220, 40));
+                    lbl.setAlignmentX(CENTER_ALIGNMENT);
                     panelPila.add(lbl);
                 }
             }
-
             panelPila.revalidate();
             panelPila.repaint();
         });
     }
 
-    public void mostrarTurno(Pastor actual, int numeroTurno) {
-        SwingUtilities.invokeLater(() -> {
-            if (actual != null) {
-                labelTurno.setText(" Turno " + numeroTurno + ": " + actual.getNombre() +
-                        " |  " + actual.getReligion() + // Mostrar religión
-                        " |  " + actual.getRiqueza() +
-                        " |  Oficio: " + actual.getOficio());
-            } else {
-                labelTurno.setText(" Turno " + numeroTurno + ": Esperando pastor...");
-            }
-        });
+    public void mostrarTurno(Pastor a, int t) {
+        SwingUtilities.invokeLater(() -> labelTurno.setText("Turno " + t + ": " + (a != null ? a.getNombre() + " | " + a.getReligion() + " | " + a.getRiqueza() + " | Oficio: " + a.getOficio() : "Esperando pastor...")));
     }
 
-    public void mostrarGanador(Pastor ganador) {
-        SwingUtilities.invokeLater(() -> {
-            if (ganador != null) {
-                JOptionPane.showMessageDialog(this,
-                        " ¡El ganador es: " + ganador.getNombre() +
-                                "\n Religión: " + ganador.getReligion() + // Mostrar religión
-                                "\n Tesoro: " + ganador.getRiqueza() +  // ¡CORREGIDO: getRiqueza() en lugar de Riqueza()
-                                "\n Oficio: " + ganador.getOficio(),
-                        " ¡Juego terminado!", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "El juego ha terminado, pero no hay ganador",
-                        " Juego terminado", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+    public void mostrarGanador(Pastor g) {
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, g != null ? "¡El ganador es: " + g.getNombre() + "\nReligión: " + g.getReligion() + "\nTesoro: " + g.getRiqueza() + "\nOficio: " + g.getOficio() : "Sin ganador.", "Juego terminado", JOptionPane.INFORMATION_MESSAGE));
     }
 
     public void hacerVisible() {
         SwingUtilities.invokeLater(() -> setVisible(true));
     }
 
-    public void addEliminarListener(ActionListener listener) {
-        btnEliminar.addActionListener(listener);
+    public void addEliminarListener(ActionListener l) {
+        btnEliminar.addActionListener(l);
     }
 
-    public void addRescatarListener(ActionListener listener) {
-        btnRescatar.addActionListener(listener);
+    public void addRescatarListener(ActionListener l) {
+        btnRescatar.addActionListener(l);
     }
 
-    public void addRobarListener(ActionListener listener) {
-        btnRobar.addActionListener(listener);
+    public void addRobarListener(ActionListener l) {
+        btnRobar.addActionListener(l);
     }
 }
