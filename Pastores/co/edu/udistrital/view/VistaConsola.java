@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class VistaConsola extends JFrame {
-
     private JPanel panelMesa, panelPila;
     private JLabel labelTurno;
     private JButton btnEliminar, btnRescatar, btnRobar;
@@ -69,34 +68,25 @@ public class VistaConsola extends JFrame {
     public int pedirNumeroPastores() {
         while (true) {
             String s = JOptionPane.showInputDialog(this, "Ingrese el número de pastores (mínimo 1):", "Configuración inicial", JOptionPane.QUESTION_MESSAGE);
-            if (s == null) {
-                return 0;
-            
-            }try {
+            if (s == null) return 0;
+            try {
                 int n = Integer.parseInt(s);
-                if (n > 0) {
-                    return n;
-            
-                }} catch (Exception ignored) {
-            }
+                if (n > 0) return n;
+            } catch (Exception ignored) {}
             JOptionPane.showMessageDialog(this, "Número inválido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public void mostrarMesa(MesaRedonda mesa) {
-        if (mesa == null) {
-            return;
-        
-        }List<Pastor> ps = mesa.getListaPastores().toList();
-        if (ps.isEmpty()) {
-            return;
-        }
+        if (mesa == null) return;
+        List<Pastor> ps = mesa.getListaPastores().toList();
+        if (ps.isEmpty()) return;
         SwingUtilities.invokeLater(() -> {
             panelMesa.removeAll();
             panelMesa.setLayout(null);
             int w = Math.max(panelMesa.getWidth(), 800), h = Math.max(panelMesa.getHeight(), 600);
-            int cx = w / 2, cy = h / 2, lw = 85, lh = 50, n = ps.size();
-            int r = (int) (Math.min(w, h) / 2 - 150 - Math.max(lw, lh) / 2); // 🔹 radio ajustado automáticamente
+            int cx = w / 2, cy = h / 2, lw = 100, lh = 65, n = ps.size(); // 🔹 más grandes
+            int r = (int) (Math.min(w, h) / 2 - 150 - Math.max(lw, lh) / 2);
             for (int i = 0; i < n; i++) {
                 Pastor p = ps.get(i);
                 double ang = -Math.PI / 2 + 2 * Math.PI * i / n;
@@ -106,7 +96,7 @@ public class VistaConsola extends JFrame {
                 lbl.setOpaque(true);
                 lbl.setBackground(new Color(255, 255, 220));
                 lbl.setBorder(BorderFactory.createLineBorder(p.equals(mesa.getPastorActual()) ? Color.RED : new Color(180, 180, 180), 2, true));
-                lbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 13));
+                lbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 14)); // 🔹 fuente más legible
                 panelMesa.add(lbl);
             }
             panelMesa.revalidate();
@@ -148,19 +138,8 @@ public class VistaConsola extends JFrame {
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, g != null ? "¡El ganador es: " + g.getNombre() + "\nReligión: " + g.getReligion() + "\nTesoro: " + g.getRiqueza() + "\nOficio: " + g.getOficio() : "Sin ganador.", "Juego terminado", JOptionPane.INFORMATION_MESSAGE));
     }
 
-    public void hacerVisible() {
-        SwingUtilities.invokeLater(() -> setVisible(true));
-    }
-
-    public void addEliminarListener(ActionListener l) {
-        btnEliminar.addActionListener(l);
-    }
-
-    public void addRescatarListener(ActionListener l) {
-        btnRescatar.addActionListener(l);
-    }
-
-    public void addRobarListener(ActionListener l) {
-        btnRobar.addActionListener(l);
-    }
+    public void hacerVisible() { SwingUtilities.invokeLater(() -> setVisible(true)); }
+    public void addEliminarListener(ActionListener l) { btnEliminar.addActionListener(l); }
+    public void addRescatarListener(ActionListener l) { btnRescatar.addActionListener(l); }
+    public void addRobarListener(ActionListener l) { btnRobar.addActionListener(l); }
 }
