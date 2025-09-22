@@ -28,5 +28,4 @@ public class IteratorPastores implements Iterator<Pastor> {
         }
         return pastor;
     }
-
 }

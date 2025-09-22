@@ -4,51 +4,45 @@ public class Pastor {
 
     //Atributos
     private String nombre;
-    private String oficio;
-    private int ovejas;
+    private String oficio; // Se mantiene el atributo oficio
+    private String religion; // Cambiado de 'ovejas' a 'religion' y tipo String
     private int riqueza;
 
     //Constructor
-    public Pastor(String nombre, String oficio, int ovejas, int riqueza) {
+    public Pastor(String nombre, String oficio, String religion, int riqueza) { // Constructor actualizado
         this.nombre = nombre;
         this.oficio = oficio;
-        this.ovejas = ovejas;
+        this.religion = religion;
         this.riqueza = riqueza;
     }
 
     //Casos de uso
-    public void transferirRecursos(Pastor destinatario, int ovejas, int riqueza) {
-        //Caso donde el pastor eliminado (que tiene menos ovejas) debe darle sus ovejas y riquezas al que lo eliminó
-        this.ovejas -= ovejas;
-        this.riqueza -= riqueza;
-        destinatario.recibirRecursos(ovejas, riqueza);
+    public void transferirRecursos(Pastor destinatario, int riquezaTransferida) { // Solo riqueza
+        // Caso donde el pastor eliminado debe darle su riqueza al que lo eliminó
+        this.riqueza -= riquezaTransferida;
+        destinatario.recibirRecursos(riquezaTransferida);
     }
 
-    public void recibirRecursos(int ovejas, int riqueza) {
-        //Caso en el que un pastor que eliminó a otro recibe recursos del otro
-        this.ovejas += ovejas;
-        this.riqueza += riqueza;
+    public void recibirRecursos(int riquezaRecibida) { // Solo riqueza
+        // Caso en el que un pastor que eliminó a otro recibe recursos del otro
+        this.riqueza += riquezaRecibida;
     }
 
     public void dividirRecursos(Pastor destinatario){
-        //Caso donde el pastor salvador le da la mitad de sus recursos al pastor salvado
-        int ovejasParaDar = this.ovejas / 2;
+        // Caso donde el pastor salvador le da la mitad de su riqueza al pastor salvado
         int riquezaParaDar = this.riqueza / 2;
-        this.ovejas -= ovejasParaDar;
         this.riqueza -= riquezaParaDar;
-        destinatario.recibirRecursos(ovejasParaDar, riquezaParaDar); 
+        destinatario.recibirRecursos(riquezaParaDar); 
     }
 
     public void robarRecursos(Pastor rico){
-        //Caso donde el pastor más pobre le roba la tercera parte de sus recursos al pastor más rico
-        int ovejasParaRobar = rico.getOvejas() / 3;
+        // Caso donde el pastor más pobre le roba la tercera parte de su riqueza al pastor más rico
         int riquezaParaRobar = rico.getRiqueza() / 3;
-        rico.setOvejas(rico.getOvejas() - ovejasParaRobar);
         rico.setRiqueza(rico.getRiqueza() - riquezaParaRobar);
-        this.recibirRecursos(ovejasParaRobar, riquezaParaRobar);
+        this.recibirRecursos(riquezaParaRobar);
     }
 
-    //Comparación para saber quién es más rico o más pobre
+    // Comparación para saber quién es más rico o más pobre
     public boolean esMasRicoQue(Pastor otroPastor){
         return this.riqueza > otroPastor.getRiqueza();
     }
@@ -57,20 +51,21 @@ public class Pastor {
         return this.riqueza < otroPastor.getRiqueza();
     }
 
+    // Nuevo método para verificar si tienen la misma religión
+    public boolean tieneMismaReligion(Pastor otroPastor) {
+        return this.religion.equals(otroPastor.getReligion());
+    }
     
-@Override
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Pastor pastor = (Pastor) obj;
-        // Asumiendo que el nombre es un identificador único para un pastor.
-        // Si hay un ID único, sería mejor usarlo.
         return nombre.equals(pastor.nombre);
     }
 
     @Override
     public int hashCode() {
-        // Genera un código hash basado en el nombre.
         return nombre.hashCode();
     }
 
@@ -89,11 +84,11 @@ public class Pastor {
         this.oficio = oficio;
     }
 
-    public int getOvejas() {
-        return ovejas;
+    public String getReligion() { // Getter para religion
+        return religion;
     }
-    public void setOvejas(int ovejas) {
-        this.ovejas = ovejas;
+    public void setReligion(String religion) { // Setter para religion
+        this.religion = religion;
     }
 
     public int getRiqueza() {
@@ -102,6 +97,4 @@ public class Pastor {
     public void setRiqueza(int riqueza) {
         this.riqueza = riqueza;
     }
-
-
 }

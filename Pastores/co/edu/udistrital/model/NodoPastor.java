@@ -35,6 +35,4 @@ public class NodoPastor {
     public void setSiguiente(NodoPastor siguiente) {
         this.siguiente = siguiente;
     }
-
-
 }

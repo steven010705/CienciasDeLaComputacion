@@ -1,4 +1,3 @@
-// FileName: MultipleFiles/VistaConsola.java
 package co.edu.udistrital.view;
 
 import co.edu.udistrital.model.MesaRedonda;
@@ -23,11 +22,9 @@ public class VistaConsola extends JFrame {
         setTitle("🌟 Juego de Pastores 🌟");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Layout principal
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(new Color(245, 245, 255));
 
-        // Panel superior (turno)
         JPanel panelTurno = new JPanel();
         panelTurno.setBackground(new Color(200, 220, 255));
         panelTurno.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -37,16 +34,13 @@ public class VistaConsola extends JFrame {
         panelTurno.add(labelTurno);
         add(panelTurno, BorderLayout.NORTH);
 
-        // Panel central (mesa + pila)
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Panel mesa redonda
         panelMesa = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                // Tapete de la mesa
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setColor(new Color(180, 220, 180));
                 g2d.fillOval(40, 40, getWidth() - 80, getHeight() - 80);
@@ -64,7 +58,6 @@ public class VistaConsola extends JFrame {
         scrollMesa.setPreferredSize(new Dimension(620, 620));
         panelPrincipal.add(scrollMesa, BorderLayout.CENTER);
 
-        // Panel pila
         panelPila = new JPanel();
         panelPila.setLayout(new BoxLayout(panelPila, BoxLayout.Y_AXIS));
         panelPila.setBackground(new Color(255, 240, 240));
@@ -77,7 +70,6 @@ public class VistaConsola extends JFrame {
 
         add(panelPrincipal, BorderLayout.CENTER);
 
-        // Panel botones
         JPanel panelBotones = new JPanel();
         panelBotones.setBackground(new Color(230, 230, 255));
         panelBotones.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -86,7 +78,6 @@ public class VistaConsola extends JFrame {
         btnRescatar = new JButton("🕊️ Rescatar");
         btnRobar = new JButton("💰 Robar");
 
-        // Personalización botones
         JButton[] botones = {btnEliminar, btnRescatar, btnRobar};
         for (JButton b : botones) {
             b.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
@@ -100,7 +91,6 @@ public class VistaConsola extends JFrame {
         panelBotones.add(btnRobar);
         add(panelBotones, BorderLayout.SOUTH);
 
-        // Tamaño ventana
         setMinimumSize(new Dimension(1100, 800));
         setLocationRelativeTo(null);
         pack();
@@ -136,7 +126,7 @@ public class VistaConsola extends JFrame {
                 int y = (int) (centerY + radius * Math.sin(angle)) - 50;
 
                 JLabel lbl = new JLabel("<html><center><b>" + p.getNombre() +
-                        "</b><br>🐑 Ovejas: " + p.getOvejas() +
+                        "</b><br>🙏 Religión: " + p.getReligion() + // Mostrar religión
                         "<br>💎 Tesoro: " + p.getRiqueza() + "</center></html>");
                 lbl.setBounds(x, y, 140, 80);
                 lbl.setOpaque(true);
@@ -175,7 +165,7 @@ public class VistaConsola extends JFrame {
                 for (int i = pila.size() - 1; i >= 0; i--) {
                     Pastor p = pila.get(i);
                     JLabel lbl = new JLabel("👤 " + p.getNombre() +
-                            " | 🐑 " + p.getOvejas() +
+                            " | 🙏 " + p.getReligion() + // Mostrar religión
                             " | 💎 " + p.getRiqueza());
                     lbl.setOpaque(true);
                     lbl.setBackground(new Color(255, 230, 240));
@@ -198,7 +188,7 @@ public class VistaConsola extends JFrame {
         SwingUtilities.invokeLater(() -> {
             if (actual != null) {
                 labelTurno.setText("🎯 Turno " + numeroTurno + ": " + actual.getNombre() +
-                        " | 🐑 " + actual.getOvejas() +
+                        " | 🙏 " + actual.getReligion() + // Mostrar religión
                         " | 💎 " + actual.getRiqueza() +
                         " | ⚒️ Oficio: " + actual.getOficio());
             } else {
@@ -212,8 +202,8 @@ public class VistaConsola extends JFrame {
             if (ganador != null) {
                 JOptionPane.showMessageDialog(this,
                         "🏆 ¡El ganador es: " + ganador.getNombre() +
-                                "\n🐑 Ovejas: " + ganador.getOvejas() +
-                                "\n💎 Tesoro: " + ganador.getRiqueza() +
+                                "\n🙏 Religión: " + ganador.getReligion() + // Mostrar religión
+                                "\n💎 Tesoro: " + ganador.getRiqueza() +  // ¡CORREGIDO: getRiqueza() en lugar de Riqueza()
                                 "\n⚒️ Oficio: " + ganador.getOficio(),
                         "🎉 ¡Juego terminado!", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -224,12 +214,10 @@ public class VistaConsola extends JFrame {
         });
     }
 
-    // Forzar visibilidad
     public void hacerVisible() {
         SwingUtilities.invokeLater(() -> setVisible(true));
     }
 
-    // Listeners
     public void addEliminarListener(ActionListener listener) {
         btnEliminar.addActionListener(listener);
     }
