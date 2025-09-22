@@ -1,0 +1,16 @@
+Digite el número de pastores: 5
+Inicializando juego con 5 pastores...
+Creado: Pastor A (Oficio 1, Dinero: 77, Riqueza: 881)
+Creado: Pastor B (Oficio 2, Dinero: 191, Riqueza: 406)
+Creado: Pastor C (Oficio 3, Dinero: 78, Riqueza: 601)
+Creado: Pastor D (Oficio 1, Dinero: 76, Riqueza: 270)
+Creado: Pastor E (Oficio 2, Dinero: 146, Riqueza: 677)
+El juego comienza con: Pastor A
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
+Reorganizando la mesa (lógica de oficio pendiente de implementación completa).
