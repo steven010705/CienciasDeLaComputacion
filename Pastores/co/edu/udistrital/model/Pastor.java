@@ -4,8 +4,8 @@ public class Pastor {
 
     //Atributos
     private String nombre;
-    private String oficio; // Se mantiene el atributo oficio
-    private String religion; // Cambiado de 'ovejas' a 'religion' y tipo String
+    private String oficio;
+    private String religion; // Cambiado de 'ovejas' a 'religion'
     private int riqueza;
 
     //Constructor
